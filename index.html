@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muistipeli</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<style>
+
+
+:root{
+  --bg: #0f1724;
+  --card-back: #1565c0;
+  --card-front: #fff;
+  --accent: #ffb86b;
+  --gap: 12px;
+}
+
+* { box-sizing: border-box; }
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: #eef2ff;
+}
+
+.game-container {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 16px;
+    width: calc(100% - 32%)
+}
+
+main {
+  background-color: rgba(3, 8, 20, 0.45); 
+  backdrop-filter: blur(6px); 
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.topbar h1 { margin:0; font-size:1.2rem; color:#fff; }
+
+.controls button {
+    margin-left: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--accent);
+    border: none;
+    color: #111;
+    cursor: pointer;
+    font-weight:600;
+}
+
+.game-board {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    justify-items: center;
+    align-items: center;
+    padding: 12px;
+}
+
+.card {
+    width: 100%;
+    max-width: 140px; /* estää korttia venymästä liikaa isoilla näytöillä */
+    aspect-ratio: 3 / 4; /* leveä/pysty-suhde */
+    perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+}
+
+.card-inner {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.45s cubic-bezier(.2,.9,.3,1);
+    transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner { transform: rotateY(180deg); }
+
+.card-front, .card-back {
+    position: absolute;
+    inset: 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius: 10px;
+    backface-visibility: hidden;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+    font-size: 1.6rem;
+}
+
+
+.card-inner {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.45s cubic-bezier(.2,.9,.3,1);
+  transform-style: preserve-3d;
+}
+
+/* Kun käännetään */
+
+.card.flipped .card-inner { transform: rotateY(180deg); }
+
+/* Front/back */
+.card-front, .card-back {
+  position: absolute;
+  inset: 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+  font-size: 1.6rem;
+}
+
+/* Takapuoli */
+.card-back {
+  background: linear-gradient(180deg, var(--card-back), #0b3d6b);
+  color: white;
+}
+
+/* Etupuoli */
+.card-front {
+  background: rgba(255,255,255,0.96);
+  color: #111;
+  transform: rotateY(180deg);
+}
+
+/* Matched-tila */
+.card.matched .card-inner {
+  transform: scale(0.98);
+  opacity: 0.8;
+  filter: saturate(0.9);
+}
+
+@media (max-width: 420px) {
+  .game-container { padding: 8px; }
+  .topbar h1 { font-size: 1rem; }
+  .controls button { padding: 6px 8px; font-size: 0.9rem; }
+  .card { max-width: 96px; }
+}
+
+@media (min-width: 900px) {
+  .game-board { gap: 14px; }
+  .card { max-width: 180px; aspect-ratio: 4/5; }
+}
+</style>
+<body>
+    <div class="game-container">
+        <header class="topbar">
+            <h1>Muistipeli</h1>
+            <div class="controls"></div>
+                <button id="restart-btn">Aloita alusta</button>
+                <div class="status">Aika: <span id="timer">0:00</span></div>
+            </div>
+            
+        </header>
+
+        <main>
+            <div id="game-board" class="game-board" aria-live="polite"></div>
+        </main>
+
+        <footer class="footer">
+            <small>Valitse korttien määrä aloittamalla alusta</small>
+        </footer>
+    </div>
+
+    <script type="module" src="game.js"></script>
+</body>
+</html>
